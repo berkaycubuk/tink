@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button onclick="addData()">Run</button>
+    <script>
+      // store
+      var store = [];
+
+      // function
+      function node(data) {
+        if (store.length <= 0) {
+          store.push([data, 1]);
+
+          return false;
+        }
+
+        if (store.length == 1) {
+          if (store[0][0] - data < data) {
+            store.push([data, 1]);
+          } else {
+            store.push([data, 0]);
+          }
+
+          return store[1][1];
+        }
+
+        for (var i = 0; i < store.length; i++) {
+          if (store[i][0] == data) {
+            store.push([data, store[i][1]]);
+            return store[i][1];
+          }
+        }
+
+        var temp = 0.9;
+        var tempId;
+
+        // en yakını bulmaya çalış
+        for (var i = 0; i < store.length; i++) {
+          if (store[i][0] > data) {
+            if (store[i][0] - data < temp) {
+              temp = store[i][0] - data;
+              tempId = i;
+            }
+          } else {
+            if (data - store[i][0] < temp) {
+              temp = data - store[i][0];
+              tempId = i;
+            }
+          }
+        }
+
+        // yakınlıktan uzaksa
+        if (temp > 0.5) {
+          var res = store[tempId][1];
+          if (res == 0) {
+            res = 1;
+          } else {
+            res = 0;
+          }
+          store.push([data, res]);
+          return res;
+        } else {
+          store.push([data, store[tempId][1]]);
+          return store[tempId][1];
+        }
+      }
+
+      function addData() {
+        for (var i = 1; i <= 10; i++) {
+          node(Math.random());
+        }
+
+        console.log(store);
+      }
+    </script>
+  </body>
+</html>
